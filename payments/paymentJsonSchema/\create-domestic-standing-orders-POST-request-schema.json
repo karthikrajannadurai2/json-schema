@@ -1,0 +1,349 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "Data",
+    "Risk"
+  ],
+  "properties": {
+    "Data": {
+      "type": "object",
+      "required": [
+        "ConsentId",
+        "Initiation"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "ConsentId": {
+          "description": "OB: Unique identification as assigned by the ASPSP to uniquely identify the consent resource.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "Initiation": {
+          "type": "object",
+          "required": [
+            "Frequency",
+            "FirstPaymentDateTime",
+            "FirstPaymentAmount",
+            "CreditorAccount"
+          ],
+          "description": "The Initiation payload is sent by the initiating party to the ASPSP. It is used to request movement of funds from the debtor account to a creditor for a domestic standing order.",
+          "additionalProperties": false,
+          "properties": {
+            "Frequency": {
+              "description": "Individual Definitions:\nEvryDay - Every day\nEvryWorkgDay - Every working day\nIntrvlWkDay - An interval specified in weeks (01 to 09), and the day within the week (01 to 07)\nWkInMnthDay - A monthly interval, specifying the week of the month (01 to 05) and day within the week (01 to 07)\nIntrvlMnthDay - An interval specified in months (between 01 to 06, 12, 24), specifying the day within the month (-5 to -1, 1 to 31)\nQtrDay - Quarterly (either ENGLISH, SCOTTISH, or RECEIVED). \nENGLISH = Paid on the 25th March, 24th June, 29th September and 25th December. \nSCOTTISH = Paid on the 2nd February, 15th May, 1st August and 11th November.\nRECEIVED = Paid on the 20th March, 19th June, 24th September and 20th December. \nIndividual Patterns:\nEvryDay (ScheduleCode)\nEvryWorkgDay (ScheduleCode)\nIntrvlWkDay:IntervalInWeeks:DayInWeek (ScheduleCode + IntervalInWeeks + DayInWeek)\nWkInMnthDay:WeekInMonth:DayInWeek (ScheduleCode + WeekInMonth + DayInWeek)\nIntrvlMnthDay:IntervalInMonths:DayInMonth (ScheduleCode + IntervalInMonths + DayInMonth)\nQtrDay: + either (ENGLISH, SCOTTISH or RECEIVED) ScheduleCode + QuarterDay\nThe regular expression for this element combines five smaller versions for each permitted pattern. To aid legibility - the components are presented individually here:\nEvryDay\nEvryWorkgDay\nIntrvlWkDay:0[1-9]:0[1-7]\nWkInMnthDay:0[1-5]:0[1-7]\nIntrvlMnthDay:(0[1-6]|12|24):(-0[1-5]|0[1-9]|[12][0-9]|3[01])\nQtrDay:(ENGLISH|SCOTTISH|RECEIVED)\nFull Regular Expression:\n^(EvryDay)$|^(EvryWorkgDay)$|^(IntrvlWkDay:0[1-9]:0[1-7])$|^(WkInMnthDay:0[1-5]:0[1-7])$|^(IntrvlMnthDay:(0[1-6]|12|24):(-0[1-5]|0[1-9]|[12][0-9]|3[01]))$|^(QtrDay:(ENGLISH|SCOTTISH|RECEIVED))$",
+              "type": "string",
+              "pattern": "^(EvryDay)$|^(EvryWorkgDay)$|^(IntrvlDay:((0[2-9])|([1-2][0-9])|3[0-1]))$|^(IntrvlWkDay:0[1-9]:0[1-7])$|^(WkInMnthDay:0[1-5]:0[1-7])$|^(IntrvlMnthDay:(0[1-6]|12|24):(-0[1-5]|0[1-9]|[12][0-9]|3[01]))$|^(QtrDay:(ENGLISH|SCOTTISH|RECEIVED))$"
+            },
+            "Reference": {
+              "description": "Unique reference, as assigned by the creditor, to unambiguously refer to the payment transaction.\nUsage: If available, the initiating party should provide this reference in the structured remittance information, to enable reconciliation by the creditor upon receipt of the amount of money.\nIf the business context requires the use of a creditor reference or a payment remit identification, and only one identifier can be passed through the end-to-end chain, the creditor's reference or payment remittance identification should be quoted in the end-to-end transaction identification.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 35
+            },
+            "NumberOfPayments": {
+              "description": "Number of the payments that will be made in completing this frequency sequence including any executed since the sequence start date.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 35
+            },
+            "FirstPaymentDateTime": {
+              "description": "The date on which the first payment for a Standing Order schedule will be made.All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00",
+              "type": "string",
+              "format": "date-time"
+            },
+            "RecurringPaymentDateTime": {
+              "description": "The date on which the first recurring payment for a Standing Order schedule will be made. \nUsage: This must be populated only if the first recurring date is different to the first payment date.All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00",
+              "type": "string",
+              "format": "date-time"
+            },
+            "FinalPaymentDateTime": {
+              "description": "The date on which the final payment for a Standing Order schedule will be made.All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00",
+              "type": "string",
+              "format": "date-time"
+            },
+            "FirstPaymentAmount": {
+              "type": "object",
+              "required": [
+                "Amount",
+                "Currency"
+              ],
+              "description": "The amount of the first Standing Order",
+              "additionalProperties": false,
+              "properties": {
+                "Amount": {
+                  "description": "A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.",
+                  "type": "string",
+                  "pattern": "^\\d{1,13}$|^\\d{1,13}\\.\\d{1,5}$"
+                },
+                "Currency": {
+                  "description": "A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 \"Codes for the representation of currencies and funds\".",
+                  "type": "string",
+                  "pattern": "^[A-Z]{3,3}$"
+                }
+              }
+            },
+            "RecurringPaymentAmount": {
+              "type": "object",
+              "required": [
+                "Amount",
+                "Currency"
+              ],
+              "description": "The amount of the recurring Standing Order",
+              "additionalProperties": false,
+              "properties": {
+                "Amount": {
+                  "description": "A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.",
+                  "type": "string",
+                  "pattern": "^\\d{1,13}$|^\\d{1,13}\\.\\d{1,5}$"
+                },
+                "Currency": {
+                  "description": "A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 \"Codes for the representation of currencies and funds\".",
+                  "type": "string",
+                  "pattern": "^[A-Z]{3,3}$"
+                }
+              }
+            },
+            "FinalPaymentAmount": {
+              "type": "object",
+              "required": [
+                "Amount",
+                "Currency"
+              ],
+              "description": "The amount of the final Standing Order",
+              "additionalProperties": false,
+              "properties": {
+                "Amount": {
+                  "description": "A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.",
+                  "type": "string",
+                  "pattern": "^\\d{1,13}$|^\\d{1,13}\\.\\d{1,5}$"
+                },
+                "Currency": {
+                  "description": "A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 \"Codes for the representation of currencies and funds\".",
+                  "type": "string",
+                  "pattern": "^[A-Z]{3,3}$"
+                }
+              }
+            },
+            "DebtorAccount": {
+              "type": "object",
+              "required": [
+                "SchemeName",
+                "Identification"
+              ],
+              "description": "Provides the details to identify the debtor account.",
+              "additionalProperties": false,
+              "properties": {
+                "SchemeName": {
+                  "description": "Name of the identification scheme, in a coded form as published in an external list.",
+                  "type": "string",
+                  "x-namespaced-enum": [
+                    "UK.OBIE.BBAN",
+                    "UK.OBIE.IBAN",
+                    "UK.OBIE.PAN",
+                    "UK.OBIE.Paym",
+                    "UK.OBIE.SortCodeAccountNumber"
+                  ]
+                },
+                "Identification": {
+                  "description": "Identification assigned by an institution to identify an account. This identification is known by the account owner.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "Name": {
+                  "description": "The account name is the name or names of the account owner(s) represented at an account level, as displayed by the ASPSP's online channels.\nNote, the account name is not the product name or the nickname of the account.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 350
+                },
+                "SecondaryIdentification": {
+                  "description": "This is secondary identification of the account, as assigned by the account servicing institution. \nThis can be used by building societies to additionally identify accounts with a roll number (in addition to a sort code and account number combination).",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 34
+                }
+              }
+            },
+            "CreditorAccount": {
+              "type": "object",
+              "required": [
+                "SchemeName",
+                "Identification",
+                "Name"
+              ],
+              "description": "Identification assigned by an institution to identify an account. This identification is known by the account owner.",
+              "additionalProperties": false,
+              "properties": {
+                "SchemeName": {
+                  "description": "Name of the identification scheme, in a coded form as published in an external list.",
+                  "type": "string",
+                  "x-namespaced-enum": [
+                    "UK.OBIE.BBAN",
+                    "UK.OBIE.IBAN",
+                    "UK.OBIE.PAN",
+                    "UK.OBIE.Paym",
+                    "UK.OBIE.SortCodeAccountNumber"
+                  ]
+                },
+                "Identification": {
+                  "description": "Identification assigned by an institution to identify an account. This identification is known by the account owner.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "Name": {
+                  "description": "The account name is the name or names of the account owner(s) represented at an account level.\nNote, the account name is not the product name or the nickname of the account.\nOB: ASPSPs may carry out name validation for Confirmation of Payee, but it is not mandatory.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 350
+                },
+                "SecondaryIdentification": {
+                  "description": "This is secondary identification of the account, as assigned by the account servicing institution. \nThis can be used by building societies to additionally identify accounts with a roll number (in addition to a sort code and account number combination).",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 34
+                }
+              }
+            },
+            "SupplementaryData": {
+              "type": "object",
+              "description": "Additional information that can not be captured in the structured fields and/or any other specific block.",
+              "additionalProperties": true
+            }
+          }
+        }
+      }
+    },
+    "Risk": {
+      "type": "object",
+      "description": "The Risk section is sent by the initiating party to the ASPSP.\nIt is used to specify additional details for risk scoring for Payments.",
+      "additionalProperties": false,
+      "properties": {
+        "PaymentContextCode": {
+          "type": "string",
+          "description": "Specifies the payment context\n* BillPayment - @deprecated\n* EcommerceGoods - @deprecated\n* EcommerceServices - @deprecated\n* Other - @deprecated\n* PartyToParty - @deprecated\n",
+          "enum": [
+            "BillingGoodsAndServicesInAdvance",
+            "BillingGoodsAndServicesInArrears",
+            "PispPayee",
+            "EcommerceMerchantInitiatedPayment",
+            "FaceToFacePointOfSale",
+            "TransferToSelf",
+            "TransferToThirdParty",
+            "BillPayment",
+            "EcommerceGoods",
+            "EcommerceServices",
+            "Other",
+            "PartyToParty"
+          ]
+        },
+        "MerchantCategoryCode": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 4,
+          "description": "Category code conform to ISO 18245, related to the type of services or goods the merchant provides for the transaction."
+        },
+        "MerchantCustomerIdentification": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 70,
+          "description": "The unique customer identifier of the PSU with the merchant."
+        },
+        "ContractPresentInidicator": {
+          "type": "boolean",
+          "description": "Indicates if Payee has a contractual relationship with the PISP."
+        },
+        "BeneficiaryPrepopulatedIndicator": {
+          "type": "boolean",
+          "description": "Indicates if PISP has immutably prepopulated payment details in for the PSU."
+        },
+        "PaymentPurposeCode": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 4,
+          "description": "Category code, related to the type of services or goods that corresponds to the underlying purpose of the payment that conforms to Recommended UK Purpose Code in ISO 20022 Payment Messaging List"
+        },
+        "BeneficiaryAccountType": {
+          "description": "Specifies the extended type of account.",
+          "type": "string",
+          "enum": [
+            "Business",
+            "BusinessSavingsAccount",
+            "Charity",
+            "Collection",
+            "Corporate",
+            "Ewallet",
+            "Government",
+            "Investment",
+            "ISA",
+            "JointPersonal",
+            "Pension",
+            "Personal",
+            "PersonalSavingsAccount",
+            "Premier",
+            "Wealth"
+          ]
+        },
+        "DeliveryAddress": {
+          "required": [
+            "Country",
+            "TownName"
+          ],
+          "type": "object",
+          "description": "Information that locates and identifies a specific address,\nas defined by postal services or in free format text.",
+          "properties": {
+            "AddressLine": {
+              "maxItems": 2,
+              "minItems": 0,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 70,
+                "description": "Information that locates and identifies a specific address,\nas defined by postal services, that is presented in free format\ntext."
+              }
+            },
+            "StreetName": {
+              "description": "Name of a street or thoroughfare.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 70
+            },
+            "BuildingNumber": {
+              "description": "Number that identifies the position of a building on a street.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 16
+            },
+            "PostCode": {
+              "description": "Identifier consisting of a group of letters and/or numbers that is added to a postal address to assist the sorting of mail.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 16
+            },
+            "TownName": {
+              "description": "Name of a built-up area, with defined boundaries, and a local government.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 35
+            },
+            "CountrySubDivision": {
+              "description": "Identifies a subdivision of a country such as state, region, county.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 35
+            },
+            "Country": {
+              "description": "Nation with its own government.",
+              "type": "string",
+              "pattern": "^[A-Z]{2,2}$"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/draft-04/schema#"
+}

@@ -1,0 +1,533 @@
+{}  "type": "object",
+  "required": [
+    "Data"
+  ],
+  "properties": {
+    "Data": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Statement": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "Provides further details on a statement resource.",
+            "required": [
+              "AccountId",
+              "Type",
+              "StartDateTime",
+              "EndDateTime",
+              "CreationDateTime"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "AccountId": {
+                "description": "A unique and immutable identifier used to identify the account resource. This identifier has no meaning to the account owner.",
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 40
+              },
+              "StatementId": {
+                "description": "Unique identifier for the statement resource within an servicing institution. This identifier is both unique and immutable.",
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 40
+              },
+              "StatementReference": {
+                "description": "Unique reference for the statement. This reference may be optionally populated if available.",
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 35
+              },
+              "Type": {
+                "description": "Statement type, in a coded form.",
+                "type": "string",
+                "enum": [
+                  "AccountClosure",
+                  "AccountOpening",
+                  "Annual",
+                  "Interim",
+                  "RegularPeriodic"
+                ]
+              },
+              "StartDateTime": {
+                "description": "Date and time at which the statement period starts.All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00",
+                "type": "string",
+                "format": "date-time"
+              },
+              "EndDateTime": {
+                "description": "Date and time at which the statement period ends.All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00",
+                "type": "string",
+                "format": "date-time"
+              },
+              "CreationDateTime": {
+                "description": "Date and time at which the resource was created.All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00",
+                "type": "string",
+                "format": "date-time"
+              },
+              "StatementDescription": {
+                "type": "array",
+                "items": {
+                  "description": "Other descriptions that may be available for the statement resource.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                }
+              },
+              "StatementBenefit": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "description": "Set of elements used to provide details of a benefit or reward amount for the statement resource.",
+                  "required": [
+                    "Type",
+                    "Amount"
+                  ],
+                  "properties": {
+                    "Type": {
+                      "description": "Benefit type, in a coded form.",
+                      "type": "string",
+                      "x-namespaced-enum": [
+                        "UK.OBIE.Cashback",
+                        "UK.OBIE.Insurance",
+                        "UK.OBIE.TravelDiscount",
+                        "UK.OBIE.TravelInsurance"
+                      ]
+                    },
+                    "Amount": {
+                      "type": "object",
+                      "required": [
+                        "Amount",
+                        "Currency"
+                      ],
+                      "description": "Amount of money associated with the statement benefit type.",
+                      "properties": {
+                        "Amount": {
+                          "description": "A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.",
+                          "type": "string",
+                          "pattern": "^\\d{1,13}$|^\\d{1,13}\\.\\d{1,5}$"
+                        },
+                        "Currency": {
+                          "description": "A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 \"Codes for the representation of currencies and funds\".",
+                          "type": "string",
+                          "pattern": "^[A-Z]{3,3}$"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "StatementFee": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "description": "Set of elements used to provide details of a fee for the statement resource.",
+                  "required": [
+                    "CreditDebitIndicator",
+                    "Type",
+                    "Amount"
+                  ],
+                  "properties": {
+                    "Description": {
+                      "description": "Description that may be available for the statement fee.",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "CreditDebitIndicator": {
+                      "description": "Indicates whether the amount is a credit or a debit. \nUsage: A zero amount is considered to be a credit amount.",
+                      "type": "string",
+                      "enum": [
+                        "Credit",
+                        "Debit"
+                      ]
+                    },
+                    "Type": {
+                      "description": "Fee type, in a coded form.",
+                      "type": "string",
+                      "x-namespaced-enum": [
+                        "UK.OBIE.Annual",
+                        "UK.OBIE.BalanceTransfer",
+                        "UK.OBIE.CashAdvance",
+                        "UK.OBIE.CashTransaction",
+                        "UK.OBIE.ForeignCashTransaction",
+                        "UK.OBIE.ForeignTransaction",
+                        "UK.OBIE.Gambling",
+                        "UK.OBIE.LatePayment",
+                        "UK.OBIE.MoneyTransfer",
+                        "UK.OBIE.Monthly",
+                        "UK.OBIE.Overlimit",
+                        "UK.OBIE.PostalOrder",
+                        "UK.OBIE.PrizeEntry",
+                        "UK.OBIE.StatementCopy",
+                        "UK.OBIE.Total"
+                      ]
+                    },
+                    "Rate": {
+                      "description": "Rate charged for Statement Fee (where it is charged in terms of a rate rather than an amount)",
+                      "type": "number"
+                    },
+                    "RateType": {
+                      "description": "Description that may be available for the statement fee rate type.",
+                      "type": "string",
+                      "x-namespaced-enum": [
+                        "UK.OBIE.AER",
+                        "UK.OBIE.EAR"
+                      ]
+                    },
+                    "Frequency": {
+                      "description": "How frequently the fee is applied to the Account.",
+                      "type": "string",
+                      "x-namespaced-enum": [
+                        "UK.OBIE.ChargingPeriod",
+                        "UK.OBIE.PerTransactionAmount",
+                        "UK.OBIE.PerTransactionPercentage",
+                        "UK.OBIE.Quarterly",
+                        "UK.OBIE.StatementMonthly",
+                        "UK.OBIE.Weekly"
+                      ]
+                    },
+                    "Amount": {
+                      "type": "object",
+                      "required": [
+                        "Amount",
+                        "Currency"
+                      ],
+                      "description": "Amount of money associated with the statement fee type.",
+                      "properties": {
+                        "Amount": {
+                          "description": "A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.",
+                          "type": "string",
+                          "pattern": "^\\d{1,13}$|^\\d{1,13}\\.\\d{1,5}$"
+                        },
+                        "Currency": {
+                          "description": "A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 \"Codes for the representation of currencies and funds\".",
+                          "type": "string",
+                          "pattern": "^[A-Z]{3,3}$"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "StatementInterest": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "description": "Set of elements used to provide details of a generic interest amount related to the statement resource.",
+                  "required": [
+                    "CreditDebitIndicator",
+                    "Type",
+                    "Amount"
+                  ],
+                  "properties": {
+                    "Description": {
+                      "description": "Description that may be available for the statement interest.",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "CreditDebitIndicator": {
+                      "description": "Indicates whether the amount is a credit or a debit. \nUsage: A zero amount is considered to be a credit amount.",
+                      "type": "string",
+                      "enum": [
+                        "Credit",
+                        "Debit"
+                      ]
+                    },
+                    "Type": {
+                      "description": "Interest amount type, in a coded form.",
+                      "type": "string",
+                      "x-namespaced-enum": [
+                        "UK.OBIE.BalanceTransfer",
+                        "UK.OBIE.Cash",
+                        "UK.OBIE.EstimatedNext",
+                        "UK.OBIE.Purchase",
+                        "UK.OBIE.Total"
+                      ]
+                    },
+                    "Rate": {
+                      "description": "field representing a percentage (e.g. 0.05 represents 5% and 0.9525 represents 95.25%). Note the number of decimal places may vary.",
+                      "type": "number"
+                    },
+                    "RateType": {
+                      "description": "Description that may be available for the statement Interest rate type.",
+                      "type": "string",
+                      "x-namespaced-enum": [
+                        "UK.OBIE.BOEBaseRate",
+                        "UK.OBIE.FixedRate",
+                        "UK.OBIE.Gross",
+                        "UK.OBIE.LoanProviderBaseRate",
+                        "UK.OBIE.Net"
+                      ]
+                    },
+                    "Frequency": {
+                      "description": "Specifies the statement fee type requested",
+                      "type": "string",
+                      "x-namespaced-enum": [
+                        "UK.OBIE.Daily",
+                        "UK.OBIE.HalfYearly",
+                        "UK.OBIE.Monthly",
+                        "UK.OBIE.PerStatementDate",
+                        "UK.OBIE.Quarterly",
+                        "UK.OBIE.Weekly",
+                        "UK.OBIE.Yearly"
+                      ]
+                    },
+                    "Amount": {
+                      "type": "object",
+                      "required": [
+                        "Amount",
+                        "Currency"
+                      ],
+                      "description": "Amount of money associated with the statement interest amount type.",
+                      "properties": {
+                        "Amount": {
+                          "description": "A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.",
+                          "type": "string",
+                          "pattern": "^\\d{1,13}$|^\\d{1,13}\\.\\d{1,5}$"
+                        },
+                        "Currency": {
+                          "description": "A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 \"Codes for the representation of currencies and funds\".",
+                          "type": "string",
+                          "pattern": "^[A-Z]{3,3}$"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "StatementAmount": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "description": "Set of elements used to provide details of a generic amount for the statement resource.",
+                  "required": [
+                    "CreditDebitIndicator",
+                    "Type",
+                    "Amount"
+                  ],
+                  "properties": {
+                    "CreditDebitIndicator": {
+                      "description": "Indicates whether the amount is a credit or a debit. \nUsage: A zero amount is considered to be a credit amount.",
+                      "type": "string",
+                      "enum": [
+                        "Credit",
+                        "Debit"
+                      ]
+                    },
+                    "Type": {
+                      "description": "Amount type, in a coded form.",
+                      "type": "string",
+                      "x-namespaced-enum": [
+                        "UK.OBIE.ArrearsClosingBalance",
+                        "UK.OBIE.AvailableBalance",
+                        "UK.OBIE.AverageBalanceWhenInCredit",
+                        "UK.OBIE.AverageBalanceWhenInDebit",
+                        "UK.OBIE.AverageDailyBalance",
+                        "UK.OBIE.BalanceTransferClosingBalance",
+                        "UK.OBIE.CashClosingBalance",
+                        "UK.OBIE.ClosingBalance",
+                        "UK.OBIE.CreditLimit",
+                        "UK.OBIE.CurrentPayment",
+                        "UK.OBIE.DirectDebitPaymentDue",
+                        "UK.OBIE.FSCSInsurance",
+                        "UK.OBIE.MinimumPaymentDue",
+                        "UK.OBIE.PendingTransactionsBalance",
+                        "UK.OBIE.PreviousClosingBalance",
+                        "UK.OBIE.PreviousPayment",
+                        "UK.OBIE.PurchaseClosingBalance",
+                        "UK.OBIE.StartingBalance",
+                        "UK.OBIE.TotalAdjustments",
+                        "UK.OBIE.TotalCashAdvances",
+                        "UK.OBIE.TotalCharges",
+                        "UK.OBIE.TotalCredits",
+                        "UK.OBIE.TotalDebits",
+                        "UK.OBIE.TotalPurchases"
+                      ]
+                    },
+                    "Amount": {
+                      "type": "object",
+                      "required": [
+                        "Amount",
+                        "Currency"
+                      ],
+                      "description": "Amount of money associated with the amount type.",
+                      "properties": {
+                        "Amount": {
+                          "description": "A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.",
+                          "type": "string",
+                          "pattern": "^\\d{1,13}$|^\\d{1,13}\\.\\d{1,5}$"
+                        },
+                        "Currency": {
+                          "description": "A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 \"Codes for the representation of currencies and funds\".",
+                          "type": "string",
+                          "pattern": "^[A-Z]{3,3}$"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "StatementDateTime": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "description": "Set of elements used to provide details of a generic date time for the statement resource.",
+                  "required": [
+                    "DateTime",
+                    "Type"
+                  ],
+                  "properties": {
+                    "DateTime": {
+                      "description": "Date and time associated with the date time type.All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00",
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "Type": {
+                      "description": "Date time type, in a coded form.",
+                      "type": "string",
+                      "x-namespaced-enum": [
+                        "UK.OBIE.BalanceTransferPromoEnd",
+                        "UK.OBIE.DirectDebitDue",
+                        "UK.OBIE.LastPayment",
+                        "UK.OBIE.LastStatement",
+                        "UK.OBIE.NextStatement",
+                        "UK.OBIE.PaymentDue",
+                        "UK.OBIE.PurchasePromoEnd",
+                        "UK.OBIE.StatementAvailable"
+                      ]
+                    }
+                  }
+                }
+              },
+              "StatementRate": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "description": "Set of elements used to provide details of a generic rate related to the statement resource.",
+                  "required": [
+                    "Rate",
+                    "Type"
+                  ],
+                  "properties": {
+                    "Rate": {
+                      "description": "Rate associated with the statement rate type.",
+                      "type": "string",
+                      "pattern": "^(-?\\d{1,3}){1}(\\.\\d{1,4}){0,1}$"
+                    },
+                    "Type": {
+                      "description": "Statement rate type, in a coded form.",
+                      "type": "string",
+                      "x-namespaced-enum": [
+                        "UK.OBIE.AnnualBalanceTransfer",
+                        "UK.OBIE.AnnualBalanceTransferAfterPromo",
+                        "UK.OBIE.AnnualBalanceTransferPromo",
+                        "UK.OBIE.AnnualCash",
+                        "UK.OBIE.AnnualPurchase",
+                        "UK.OBIE.AnnualPurchaseAfterPromo",
+                        "UK.OBIE.AnnualPurchasePromo",
+                        "UK.OBIE.MonthlyBalanceTransfer",
+                        "UK.OBIE.MonthlyCash",
+                        "UK.OBIE.MonthlyPurchase"
+                      ]
+                    }
+                  }
+                }
+              },
+              "StatementValue": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "description": "Set of elements used to provide details of a generic number value related to the statement resource.",
+                  "required": [
+                    "Value",
+                    "Type"
+                  ],
+                  "properties": {
+                    "Value": {
+                      "description": "Value associated with the statement value type.",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 40
+                    },
+                    "Type": {
+                      "description": "Statement value type, in a coded form.",
+                      "type": "string",
+                      "x-namespaced-enum": [
+                        "UK.OBIE.AirMilesPoints",
+                        "UK.OBIE.AirMilesPointsBalance",
+                        "UK.OBIE.Credits",
+                        "UK.OBIE.Debits",
+                        "UK.OBIE.HotelPoints",
+                        "UK.OBIE.HotelPointsBalance",
+                        "UK.OBIE.RetailShoppingPoints",
+                        "UK.OBIE.RetailShoppingPointsBalance"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Links": {
+      "type": "object",
+      "description": "Links relevant to the payload",
+      "required": [
+        "Self"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "Self": {
+          "type": "string",
+          "format": "uri"
+        },
+        "First": {
+          "type": "string",
+          "format": "uri"
+        },
+        "Prev": {
+          "type": "string",
+          "format": "uri"
+        },
+        "Next": {
+          "type": "string",
+          "format": "uri"
+        },
+        "Last": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "Meta": {
+      "title": "MetaData",
+      "type": "object",
+      "description": "Meta Data relevant to the payload",
+      "additionalProperties": false,
+      "properties": {
+        "TotalPages": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": -2147483648,
+          "maximum": 2147483647
+        },
+        "FirstAvailableDateTime": {
+          "description": "All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00",
+          "type": "string",
+          "format": "date-time"
+        },
+        "LastAvailableDateTime": {
+          "description": "All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-04/schema#"
+}
